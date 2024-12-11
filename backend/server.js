@@ -17,6 +17,11 @@ db.connect((err) => {
     }
 });
 
+// Main route
+app.get('/', (req, res) => {
+    res.send('Hello, Express World!');
+});
+
 // Server setup
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
