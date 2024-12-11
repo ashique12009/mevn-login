@@ -1,8 +1,11 @@
 const express = require('express');
-const { register, login } = require('../controllers/userController');
+const userController = require('../controllers/userController');
+const validate = require('../middlewares/validate');  // Import validate middleware
+
 const router = express.Router();
 
-router.post('/register', register);
-router.post('/login', login);
+// Use validateRegister middleware before the register controller
+router.post('/register', validate.validateRegister, userController.register);
+router.post('/login', userController.login);
 
 module.exports = router;
