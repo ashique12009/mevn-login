@@ -15,13 +15,13 @@
             </div>
             <div class="mb-4">
                 <button type="submit" 
-                    class="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-lightgreen-700 focus:ring-2 focus:ring-lightgreen-400">
+                    class="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-400">
                     Login
                 </button>
             </div>
         </form>
         <p class="text-center text-sm text-lightgreen-600">
-            Don't have an account? <a href="#" class="text-lightgreen-700 font-medium hover:underline">Sign up</a>
+            Don't have an account? <a href="#" class="text-green-700 font-medium hover:underline">Sign up</a>
         </p>
     </div>
 </div>
