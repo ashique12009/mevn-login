@@ -8,14 +8,28 @@ const register = async (req, res) => {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    User.create({ email, password: hashedPassword }, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Database error', error: err });
+    try {
+        // Check if the user already exists
+        const existingUser = await User.findByEmail(email);
+        
+        if (existingUser) {
+            return res.status(409).json({ message: 'User already exists' });
         }
-        res.status(201).json({ message: 'User registered successfully' });
-    });
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Create new user
+        User.create({ email, password: hashedPassword }, (err, result) => {
+            if (err) {
+                return res.status(500).json({ message: 'Database error', error: err });
+            }
+            res.status(201).json({ message: 'User registered successfully' });
+        });
+    } catch (error) {
+        // Handle any errors that occur in the try block
+        return res.status(500).json({ message: 'Server error', error });
+    }
 };
 
 const login = (req, res) => {
