@@ -15,6 +15,7 @@
                 </div>
                 <div class="mb-4">
                     <span v-if="isLoading">Logging in...</span>
+                    <div v-if="errorMessage" class="text-red-500 text-center mb-4">{{ errorMessage }}</div>
                     <button type="submit" :disabled="isLoading"
                         class="w-full bg-green-500 text-white py-2 px-4 rounded-lg hover:bg-green-700 focus:ring-2 focus:ring-green-400">
                         Login
