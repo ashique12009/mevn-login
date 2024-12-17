@@ -1,5 +1,9 @@
 const bcrypt = require('bcryptjs');
+const jwt = require("jsonwebtoken");
 const User = require('../models/User');
+
+// Secret key for signing tokens (store securely in .env in production)
+const JWT_SECRET = process.env.JWT_SECRET; 
 
 const register = async (req, res) => {
     const { email, password } = req.body;
@@ -51,7 +55,14 @@ const login = async (req, res) => {
                 return res.status(401).json({ message: 'Invalid credentials' });
             }
 
-            return res.status(200).json({ message: 'Login successful' });
+            // Generate JWT token
+            const token = jwt.sign(
+                { id: user.id, email: user.email }, // Payload
+                JWT_SECRET, // Secret key
+                { expiresIn: "1h" } // Token expiration time
+            );
+
+            return res.status(200).json({ message: 'Login successful', token });
         }
 
         return res.status(404).json({ message: 'User not found' });
