@@ -32,27 +32,33 @@ const register = async (req, res) => {
     }
 };
 
-const login = (req, res) => {
+const login = async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
         return res.status(400).json({ message: 'All fields are required' });
     }
 
-    User.findByUsername(email, async (err, results) => {
-        if (err || results.length === 0) {
-            return res.status(404).json({ message: 'User not found' });
+    try {
+        // Check if the user exists
+        const existingUser = await User.findByEmail(email);
+        
+        if (existingUser) {
+            const user = existingUser;
+            const isValidPassword = await bcrypt.compare(password, user.password);
+
+            if (!isValidPassword) {
+                return res.status(401).json({ message: 'Invalid credentials' });
+            }
+
+            return res.status(200).json({ message: 'Login successful' });
         }
 
-        const user = results[0];
-        const isValidPassword = await bcrypt.compare(password, user.password);
-
-        if (!isValidPassword) {
-            return res.status(401).json({ message: 'Invalid credentials' });
-        }
-
-        res.status(200).json({ message: 'Login successful' });
-    });
+        return res.status(404).json({ message: 'User not found' });
+    } catch (error) {
+        // Handle any errors that occur in the try block
+        return res.status(500).json({ message: 'Server error', error });
+    }
 };
 
 module.exports = { register, login };
